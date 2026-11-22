@@ -1,19 +1,27 @@
--- Schema kochbuechlein. ON DELETE: RESTRICT, CASCADE nur bei abhängigen Daten.
--- Mengen DECIMAL (exakt vergleichbar).
+-- Rezepte-Datenbank "kochbuechlein" 
+-- Datentypen:
+--   VARCHAR(n): Namen und Beschreibungen unterschiedlicher Länge, n = großzügige Obergrenze
+--   DECIMAL(8,2): für Mengen, ermöglicht exakte Vergleiche
+--   DATE: Kaufdatum/MHD, um mit Tagen zu rechnen (z.b. DATEDIFF)
+--   ENUM: für Einheiten, Saison, Lagerort; vorgegebene Werte zur Vereinfachung
+--   TEXT: für Zubereitungsschritte oder Notizen, braucht mehr Platz als 255 Zeichen.
 DROP DATABASE IF EXISTS kochbuechlein;
 CREATE DATABASE kochbuechlein CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE kochbuechlein;
 
--- Haushalt teilt sich einen Vorrat und Rezepte.
+-- Entität Haushalt: teilt sich einen Vorrat und Rezepte. 
+-- Schlüssel: Name, Haushaltsname muss eindeutig sein.
 CREATE TABLE haushalt (
     name    VARCHAR(100) NOT NULL,
-    adresse VARCHAR(200) NULL,
+    adresse VARCHAR(200) NULL,          
     PRIMARY KEY (name),
     CHECK (TRIM(name) <> '')
 );
 
--- Nutzer, gehört zu genau einem Haushalt. E-Mail max. 254 Zeichen (RFC).
--- Die Spezialisierung Koch/Rezeptersteller hat keine eigenen Attribute und steckt hier mit drin.
+-- Entität Person: Haushalte beinhalten Personen/User (1:N). User können Rezepte anlegen, kochen und den Vorrat pflegen.
+-- Die Spezialisierung Koch/Rezeptersteller hat keine eigenen Attribute und ergibt sich aus den Beziehungen:
+-- Koch ist, wer mindestens einen Eintrag in "kocht" hat, Rezepersteller wer in "rezept.erstellt_von" vorkommt.
+-- Schlüssel: E-Mail (max. 254 Zeichen)
 CREATE TABLE person (
     email       VARCHAR(254) NOT NULL,
     vorname     VARCHAR(50)  NOT NULL,
@@ -27,7 +35,9 @@ CREATE TABLE person (
     FOREIGN KEY (haushalt) REFERENCES haushalt (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- Lebensmittelgruppe mit Frischedauer nach Kauf; NULL = unbegrenzt haltbar.
+-- Entität Kategorie: eigene Tabelle statt Attribut der Zutat, weil Frischedauer und Aufbewahrung für alle
+-- Zutaten einer Lebensmittelkategorie gleich sind und nur einmal gepflegt werden. Frischedauer NULL = unbegrenzt haltbar.
+-- Schlüssel: eindeutiger Name
 CREATE TABLE kategorie (
     name                    VARCHAR(50)       NOT NULL,
     beschreibung            VARCHAR(255)      NULL,
@@ -37,26 +47,28 @@ CREATE TABLE kategorie (
     CHECK (frischedauer_tage IS NULL OR frischedauer_tage > 0)
 );
 
--- Zutat-Stammdaten, z. B. Tomate/'' und Tomate/'passiert'. Spezifikation '' = keine Angabe.
--- Einheit fest an der Zutat, damit Rezept- und Vorratsmengen vergleichbar sind.
+-- Entität Zutat: Eine Zutat gehört zu einer Lebensmittelkategorie (N:1).
+-- Zutaten haben eine Einheit zugewiesen, damit Rezeptzutaten und Vorräte vergleichbar sind.
+-- Schlüssel: Name + Spezifikation, damit z. B. Tomate und Tomate/passiert verschiedene Zutaten sind
 CREATE TABLE zutat (
     name          VARCHAR(60)             NOT NULL,
-    spezifikation VARCHAR(60)             NOT NULL DEFAULT '',
-    einheit       ENUM ('g', 'kg', 'ml', 'l', 'Stk', 'EL', 'TL', 'Becher', 'Tasse', 'Prise') NOT NULL,
+    spezifikation VARCHAR(60)             NOT NULL DEFAULT '',  -- Schlüssel darf nicht NULL sein
+    einheit       ENUM ('g', 'ml', 'Stk', 'EL', 'TL', 'Becher', 'Tasse', 'Prise') NOT NULL,
     kategorie     VARCHAR(50)             NOT NULL,
     PRIMARY KEY (name, spezifikation),
     CHECK (TRIM(name) <> ''),
     FOREIGN KEY (kategorie) REFERENCES kategorie (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- Anlass/Mahlzeit, z. B. Frühstück oder Grillabend.
+-- Entität Mahlzeitentyp (Frühstück, Grillabend,...): ordnet Rezepte einem Anlass zu.
 CREATE TABLE mahlzeitentyp (
     name         VARCHAR(50)  NOT NULL,
     beschreibung VARCHAR(255) NULL,
     PRIMARY KEY (name)
 );
 
--- Art des Gerichts, gehört zu einem Mahlzeitentyp (1:N).
+-- Entität Gerichttyp (Suppe, Salat …) verfeinert den Mahlzeitentyp.
+-- Mahlzeitentyp wird spezifiziert von Gerichttyp (1:N).
 CREATE TABLE gerichttyp (
     name          VARCHAR(50)  NOT NULL,
     beschreibung  VARCHAR(255) NULL,
@@ -65,7 +77,9 @@ CREATE TABLE gerichttyp (
     FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (name) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- Rezeptkopf; die Zutatenmengen gelten für "portionen". bild = Dateipfad oder URL.
+-- Entität Rezept: Rezeptersteller erstellt Rezept (1:N), Rezept hat Mahlzeitentyp (N:1).
+-- Zutatenmengen beziehen sich auf "Portionen", damit Rezepte Skaliert werden können
+-- Schlüssel: Name, Rezeptnamen sind datenbankweit eindeutig.
 CREATE TABLE rezept (
     name          VARCHAR(100)     NOT NULL,
     portionen     TINYINT UNSIGNED NOT NULL,
@@ -82,7 +96,8 @@ CREATE TABLE rezept (
     FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (name)  ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- Zubereitungsschritte, schwache Entität: ohne Rezept sinnlos -> CASCADE.
+-- Schwache Entität Schritt: ohne Rezept sinnlos. Rezept beinhaltet Schritt (1:N, mind. 1 Schritt).
+-- Schlüssel: Rezept + Reihenfolge, die Nummer ist nur innerhalb eines Rezepts eindeutig.
 CREATE TABLE schritt (
     rezept       VARCHAR(100)     NOT NULL,
     reihenfolge  TINYINT UNSIGNED NOT NULL,
@@ -94,8 +109,8 @@ CREATE TABLE schritt (
     FOREIGN KEY (rezept) REFERENCES rezept (name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
--- N:M "kocht": wer welches Rezept gekocht hat, mit eigener Notiz.
--- Person oder Rezept weg -> Notizen dazu auch weg.
+-- Beziehung "kocht" (Koch–Rezept, N:M) als eigene Tabelle: Eine Person kocht ein Rezept und kann eine Notiz dazu abspeichern. 
+-- Person oder Rezept gelöscht -> Notizen dazu auch.
 CREATE TABLE kocht (
     koch   VARCHAR(254) NOT NULL,
     rezept VARCHAR(100) NOT NULL,
@@ -105,7 +120,7 @@ CREATE TABLE kocht (
     FOREIGN KEY (rezept) REFERENCES rezept (name)  ON UPDATE CASCADE ON DELETE CASCADE
 );
 
--- N:M "benötigt": Menge je Zutat für rezept.portionen.
+-- Beziehung "benötigt" (Rezept–Zutat, N:M): Menge gilt für rezept.portionen.
 CREATE TABLE rezept_zutat (
     rezept              VARCHAR(100)  NOT NULL,
     zutat_name          VARCHAR(60)   NOT NULL,
@@ -119,15 +134,14 @@ CREATE TABLE rezept_zutat (
         ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- N:M "lagert": ein Eintrag je Haushalt und Zutat. mhd NULL = Haltbarkeit über Kategorie.
--- ort = wo die Zutat tatsächlich liegt (gleiche Werte wie kategorie.empfohlene_aufbewahrung).
+-- Beziehung "lagert" (Haushalt–Zutat, N:M) als eigene Tabelle: Menge, Kaufdatum, MHD und Lagerort pro Haushalt und Zutat
 CREATE TABLE vorrat (
     haushalt            VARCHAR(100)  NOT NULL,
     zutat_name          VARCHAR(60)   NOT NULL,
     zutat_spezifikation VARCHAR(60)   NOT NULL DEFAULT '',
     menge               DECIMAL(8, 2) NOT NULL,
     kaufdatum           DATE          NOT NULL,
-    mhd                 DATE          NULL,
+    mhd                 DATE          NULL,     -- NULL = kein MHD, Haltbarkeit über die Kategorie
     ort                 ENUM ('Kühlschrank', 'Gefrierfach', 'Vorratsschrank', 'Keller', 'Obstschale') NOT NULL,
     PRIMARY KEY (haushalt, zutat_name, zutat_spezifikation),
     CONSTRAINT ck_vorrat_menge CHECK (menge > 0),
@@ -138,7 +152,9 @@ CREATE TABLE vorrat (
         ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
--- Abgeleitete Attribute als View. haltbar_bis NULL = unbegrenzt.
+-- Abgeleitete Attribute aus dem ERM als View, werden nicht gespeichert, sondern berechnet, damit sie nie veralten:
+-- frisch_bis = Kaufdatum + Frischedauer der Kategorie, 
+-- haltbar_bis = MHD, sonst frisch_bis (NULL = unbegrenzt).
 CREATE VIEW v_vorrat AS
 SELECT v.haushalt, v.zutat_name, v.zutat_spezifikation, z.einheit, z.kategorie,
        v.menge, v.kaufdatum, v.mhd, v.ort,
