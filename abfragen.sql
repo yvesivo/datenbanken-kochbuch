@@ -19,14 +19,15 @@
     GROUP BY rezept_id
     HAVING DATEDIFF(NOW(), MAX(kocht.gekocht_am)) > 90;
     
--- 3. Welche Rezepte beinhalten die Zutaten die bald ablaufen?
+-- 3. Welche Rezepte verbrauchen die meisten Zutaten, die bald (z.B. in 3 Tagen) ablaufen oder nicht mehr frisch sind?
     SELECT rezept.name AS 'Rezept',
         Count(*) as 'Anzahl fast abgelaufener Zutaten'
     FROM benoetigt
-    JOIN vorrat using (zutat_id)
     JOIN zutat using (zutat_id)
     JOIN rezept using (rezept_id)
-    WHERE haushalt_id = 2
+    JOIN v_vorrat using (zutat_id)
+    JOIN haushalt using (haushalt_id)
+    WHERE haushalt.haushalt_id = 2
     AND DATEDIFF(MHD, NOW()) BETWEEN 0 AND 3
     GROUP BY rezept_id
     ORDER BY Count(*) DESC;
