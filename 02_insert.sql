@@ -147,6 +147,7 @@ INSERT INTO kocht (person_id, rezept_id, gekocht_am, notiz) VALUES
     (3, 3, CURDATE() - INTERVAL  1 DAY, NULL),
     (4, 3, CURDATE() - INTERVAL 21 DAY, NULL),
     (4, 5, CURDATE() - INTERVAL 10 DAY, 'Etwas Sojasoße dazu.');
+    (1, 4, CURDATE() - INTERVAL 99 DAY, 'Das war so lecker!')
 
 -- Kommentar rechts: haltbar_bis relativ zu heute
 INSERT INTO vorrat (haushalt_id, zutat_id, menge, kaufdatum, mhd, ort) VALUES
