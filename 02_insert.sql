@@ -174,6 +174,7 @@ INSERT INTO vorrat (haushalt_id, zutat_id, menge, kaufdatum, mhd, ort) VALUES
     (2, 24, 250,  CURDATE() - INTERVAL 50 DAY,  NULL,                         'Vorratsschrank'),  -- unbegrenzt
     (2, 20, 500,  CURDATE() - INTERVAL 20 DAY,  CURDATE() + INTERVAL 100 DAY, 'Vorratsschrank'),  -- +100
     (2, 9,  4,    CURDATE() - INTERVAL  3 DAY,  NULL,                         'Obstschale'),      -- +7
+    (2, 9,  6,    CURDATE() - INTERVAL  9 DAY,  NULL,                         'Obstschale'),      -- +1
     (2, 16, 300,  CURDATE() - INTERVAL  1 DAY,  NULL,                         'Kühlschrank'),     -- +2
     (2, 19, 1000, CURDATE() - INTERVAL 15 DAY,  CURDATE() + INTERVAL 300 DAY, 'Vorratsschrank'),  -- +300
     (2, 7,  2,    CURDATE() - INTERVAL  1 DAY,  NULL,                         'Kühlschrank'),     -- +6
