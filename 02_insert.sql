@@ -33,7 +33,8 @@ INSERT INTO zutat (zutat_id, name, spezifikation, einheit, kategorie) VALUES
     (6,  'Kartoffel',     'festkochend', 'g',   'Gemüse'),
     (7,  'Paprika',       'rot',         'Stk', 'Gemüse'),
     (8,  'Gurke',         '',            'Stk', 'Gemüse'),
-    (9,  'Apfel',         '',            'Stk', 'Obst'),
+    (9,  'Apfel',         'rot',         'Stk', 'Obst'),
+    (99, 'Apfel',         'gruen',       'Stk', 'Obst'),
     (10, 'Basilikum',     'frisch',      'g',   'Kräuter'),
     (11, 'Milch',         '3,5 %',       'ml',  'Milchprodukte'),
     (12, 'Butter',        '',            'g',   'Milchprodukte'),
@@ -57,7 +58,7 @@ INSERT INTO mahlzeitentyp (mahlzeit_id, name, beschreibung) VALUES
     (4, 'Grillabend',      'Geselliges Essen im Freien'),
     (5, 'Weihnachtsessen', 'Festessen an den Feiertagen');
 
-INSERT INTO gerichttyp (name, beschreibung, mahlzeitentyp) VALUES
+INSERT INTO gerichttyp (name, beschreibung, mahlzeit_id) VALUES
     ('Müsli & Porridge', 'Flocken oder Brei mit Milch',      1),
     ('Süßspeise',        'Süße Gerichte wie Pfannkuchen',    1),
     ('Suppe',            'Flüssige Gerichte, warm serviert', 2),
@@ -66,7 +67,7 @@ INSERT INTO gerichttyp (name, beschreibung, mahlzeitentyp) VALUES
     ('Salat',            'Kalte Gerichte aus Gemüse',        4),
     ('Braten',           'Fleisch im Ofen gegart',           5);
 
-INSERT INTO rezept (rezept_id, name, portionen, saison, region, ist_vegetarisch, ist_vegan, bild, erstellt_von, mahlzeitentyp) VALUES
+INSERT INTO rezept (rezept_id, name, portionen, saison, region, ist_vegetarisch, ist_vegan, bild, erstellt_von, mahlzeit_id) VALUES
     (1, 'Spaghetti Bolognese',     4, 'ganzjährig', 'Italien',      FALSE, FALSE, NULL, 1, 3),
     (2, 'Tomatensalat',            2, 'Sommer',     'Mittelmeer',   TRUE,  TRUE,  NULL, 2, 4),
     (3, 'Pfannkuchen',             4, 'ganzjährig', 'Deutschland',  TRUE,  FALSE, NULL, 3, 1),
@@ -174,7 +175,7 @@ INSERT INTO vorrat (haushalt_id, zutat_id, menge, kaufdatum, mhd, ort) VALUES
     (2, 24, 250,  CURDATE() - INTERVAL 50 DAY,  NULL,                         'Vorratsschrank'),  -- unbegrenzt
     (2, 20, 500,  CURDATE() - INTERVAL 20 DAY,  CURDATE() + INTERVAL 100 DAY, 'Vorratsschrank'),  -- +100
     (2, 9,  4,    CURDATE() - INTERVAL  3 DAY,  NULL,                         'Obstschale'),      -- +7
-    (2, 9,  6,    CURDATE() - INTERVAL  9 DAY,  NULL,                         'Obstschale'),      -- +1
+    (2, 99,  6,   CURDATE() - INTERVAL  9 DAY,  NULL,                         'Obstschale'),      -- +1
     (2, 16, 300,  CURDATE() - INTERVAL  1 DAY,  NULL,                         'Kühlschrank'),     -- +2
     (2, 19, 1000, CURDATE() - INTERVAL 15 DAY,  CURDATE() + INTERVAL 300 DAY, 'Vorratsschrank'),  -- +300
     (2, 7,  2,    CURDATE() - INTERVAL  1 DAY,  NULL,                         'Kühlschrank'),     -- +6

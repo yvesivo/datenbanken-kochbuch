@@ -167,12 +167,12 @@ CREATE TABLE vorrat (
     kaufdatum   DATE          NOT NULL,
     mhd         DATE          NULL,     -- NULL = kein MHD, Haltbarkeit über die Kategorie
     ort         ENUM ('Kühlschrank', 'Gefrierfach', 'Vorratsschrank', 'Keller', 'Obstschale') NOT NULL,
-    PRIMARY KEY (haushalt_id, zutat_id),
+    PRIMARY KEY (haushalt_id, zutat_id, kaufdatum),
     CONSTRAINT ck_vorrat_menge CHECK (menge > 0),
     CONSTRAINT ck_vorrat_mhd   CHECK (mhd IS NULL OR mhd >= kaufdatum),
     -- Vorrat hängt am Haushalt
     FOREIGN KEY (haushalt_id) REFERENCES haushalt (haushalt_id) ON DELETE CASCADE,
-    FOREIGN KEY (zutat_id)    REFERENCES zutat (zutat_id)       ON DELETE RESTRICT
+    FOREIGN KEY (zutat_id)    REFERENCES zutat (zutat_id)       ON DELETE RESTRICT,
 );
 
 -- Abgeleitete Attribute aus dem ERM als View, werden nicht gespeichert, sondern berechnet, damit sie nie veralten:
