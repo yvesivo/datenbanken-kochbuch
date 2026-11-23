@@ -172,7 +172,7 @@ CREATE TABLE vorrat (
     CONSTRAINT ck_vorrat_mhd   CHECK (mhd IS NULL OR mhd >= kaufdatum),
     -- Vorrat hängt am Haushalt
     FOREIGN KEY (haushalt_id) REFERENCES haushalt (haushalt_id) ON DELETE CASCADE,
-    FOREIGN KEY (zutat_id)    REFERENCES zutat (zutat_id)       ON DELETE RESTRICT,
+    FOREIGN KEY (zutat_id)    REFERENCES zutat (zutat_id)       ON DELETE RESTRICT
 );
 
 -- Abgeleitete Attribute aus dem ERM als View, werden nicht gespeichert, sondern berechnet, damit sie nie veralten:
