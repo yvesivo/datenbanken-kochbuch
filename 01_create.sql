@@ -1,5 +1,5 @@
 -- Rezepte-Datenbank "kochbuechlein"
--- Schlüssel: Haushalt, Person, Rezept und Zutat haben eine künstliche ID (INT, AUTO_INCREMENT) als Primärschlüssel,
+-- Schlüssel: Haushalt, Person, Rezept, und Zutat haben eine künstliche ID (INT, AUTO_INCREMENT) als Primärschlüssel,
 -- weil sie oft referenziert werden. Die im ERM unterstrichenen Attribute bleiben als UNIQUE NOT NULL eindeutig.
 -- Datentypen:
 --   INT UNSIGNED: künstliche IDs, nie negativ, über 4 Mrd. Werte
@@ -17,8 +17,8 @@ DROP DATABASE IF EXISTS kochbuechlein;
 CREATE DATABASE kochbuechlein CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE kochbuechlein;
 
--- Entität Haushalt: teilt sich einen Vorrat und Rezepte. 
--- Schlüssel: Name, Haushaltsname muss eindeutig sein.
+-- Entität Haushalt: Ein Haushalt teilt sich einen Vorrat, Küchenausstattung und Rezepte. 
+-- Schlüssel: haushalt_id, der Haushaltsname muss auch eindeutig sein.
 CREATE TABLE haushalt (
     haushalt_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name        VARCHAR(100) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE haushalt (
 -- Entität Person: Haushalte beinhalten Personen/User (1:N). User können Rezepte anlegen, kochen und den Vorrat pflegen.
 -- Die Spezialisierung Koch/Rezeptersteller hat keine eigenen Attribute und ergibt sich aus den Beziehungen:
 -- Koch ist, wer mindestens einen Eintrag in "kocht" hat, Rezepersteller wer in "rezept.erstellt_von" vorkommt.
--- Schlüssel: E-Mail (max. 254 Zeichen)
+-- Schlüssel: person_id. E-Mail ist zwar eindeutig aber kann geändert werden, eine ID ist performanter.
 CREATE TABLE person (
     person_id       INT UNSIGNED NOT NULL AUTO_INCREMENT,
     email           VARCHAR(254) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE person (
     FOREIGN KEY (haushalt_id) REFERENCES haushalt (haushalt_id) ON DELETE RESTRICT
 );
 
--- Entität Kategorie: eigene Tabelle statt Attribut der Zutat, weil Frischedauer und Aufbewahrung für alle
+-- Entität Kategorie (Gemüse/Obst,...): eigene Tabelle statt Attribut der Zutat, weil Frischedauer und Aufbewahrung für alle
 -- Zutaten einer Lebensmittelkategorie gleich sind und nur einmal gepflegt werden. Frischedauer NULL = unbegrenzt haltbar.
 -- Schlüssel: eindeutiger Name
 CREATE TABLE kategorie (
@@ -66,7 +66,7 @@ CREATE TABLE kategorie (
 
 -- Entität Zutat: Eine Zutat gehört zu einer Lebensmittelkategorie (N:1).
 -- Zutaten haben eine Einheit zugewiesen, damit Rezeptzutaten und Vorräte vergleichbar sind.
--- Schlüssel: Name + Spezifikation, damit z. B. Tomate und Tomate/passiert verschiedene Zutaten sind
+-- Schlüssel: zutat_id. 
 CREATE TABLE zutat (
     zutat_id      INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name          VARCHAR(60)  NOT NULL,
@@ -88,8 +88,7 @@ CREATE TABLE mahlzeitentyp (
     CONSTRAINT uq_mahlzeit_name UNIQUE (name)
 );
 
--- Entität Gerichttyp (Suppe, Salat …) verfeinert den Mahlzeitentyp.
--- Mahlzeitentyp wird spezifiziert von Gerichttyp (1:N).
+-- Entität Gerichttyp (Suppe, Salat,...). Mahlzeitentyp wird spezifiziert von Gerichttyp (1:N).
 CREATE TABLE gerichttyp (
     name          VARCHAR(50)  NOT NULL,
     beschreibung  VARCHAR(255) NULL,
@@ -100,7 +99,7 @@ CREATE TABLE gerichttyp (
 
 -- Entität Rezept: Rezeptersteller erstellt Rezept (1:N), Rezept hat Mahlzeitentyp (N:1).
 -- Zutatenmengen beziehen sich auf "Portionen", damit Rezepte Skaliert werden können
--- Schlüssel: Name, Rezeptnamen sind datenbankweit eindeutig.
+-- Schlüssel: rezept_id. Rezeptnamen sind dennoch eindeutig.
 CREATE TABLE rezept (
     rezept_id       INT UNSIGNED     NOT NULL AUTO_INCREMENT,
     name            VARCHAR(100)     NOT NULL,
@@ -117,7 +116,7 @@ CREATE TABLE rezept (
     CHECK (TRIM(name) <> ''),
     CONSTRAINT ck_rezept_portionen CHECK (portionen > 0),
     CONSTRAINT ck_rezept_vegan CHECK (NOT ist_vegan OR ist_vegetarisch),
-    -- Person mit Rezepten nicht löschbar (Alternative: SET NULL)
+    -- Person mit Rezepten nicht löschbar 
     FOREIGN KEY (erstellt_von)  REFERENCES person (person_id)   ON DELETE RESTRICT,
     FOREIGN KEY (mahlzeit_id)   REFERENCES mahlzeitentyp (mahlzeit_id) ON DELETE RESTRICT
 );
@@ -147,7 +146,8 @@ CREATE TABLE kocht (
     FOREIGN KEY (rezept_id) REFERENCES rezept (rezept_id) ON DELETE CASCADE
 );
 
--- Beziehung "benötigt" (Rezept–Zutat, N:M): Menge gilt für rezept.portionen.
+-- Beziehung "benötigt": Rezepte benötigen Zutaten (N:M) in vorgegebener Menge.
+-- Menge gilt für "rezept.portionen".
 CREATE TABLE benoetigt (
     rezept_id INT UNSIGNED  NOT NULL,
     zutat_id  INT UNSIGNED  NOT NULL,
@@ -160,6 +160,7 @@ CREATE TABLE benoetigt (
 );
 
 -- Beziehung "lagert" (Haushalt–Zutat, N:M) als eigene Tabelle: Menge, Kaufdatum, MHD und Lagerort pro Haushalt und Zutat
+-- Schlüssel: haushalt_id, zutat_id und kaufdatum, so können das gleiche Lebensmittel mehrfach gelagert sein mit unterschiedlichen MHDs
 CREATE TABLE vorrat (
     haushalt_id INT UNSIGNED  NOT NULL,
     zutat_id    INT UNSIGNED  NOT NULL,
@@ -177,6 +178,7 @@ CREATE TABLE vorrat (
 
 -- Abgeleitete Attribute aus dem ERM als View, werden nicht gespeichert, sondern berechnet, damit sie nie veralten:
 -- frisch_bis = Kaufdatum + Frischedauer der Kategorie, 
+-- personenanzahl = Personen pro Haushalt
 CREATE VIEW v_vorrat AS
 SELECT v.haushalt_id, h.name AS haushalt, v.zutat_id, z.name AS zutat, z.spezifikation, z.einheit, z.kategorie,
        v.menge, v.kaufdatum, v.mhd, v.ort,
