@@ -12,6 +12,7 @@
 --   MEDIUMBLOB: Bilder als Binärdaten bis 16 MB
 --   TEXT: für Zubereitungsschritte oder Notizen, braucht mehr Platz als 255 Zeichen.
 -- Löschen: RESTRICT (verweigern, solange noch verwiesen wird), CASCADE nur bei Daten, die ohne ihren Besitzer sinnlos sind.
+
 DROP DATABASE IF EXISTS kochbuechlein;
 CREATE DATABASE kochbuechlein CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE kochbuechlein;
@@ -92,9 +93,9 @@ CREATE TABLE mahlzeitentyp (
 CREATE TABLE gerichttyp (
     name          VARCHAR(50)  NOT NULL,
     beschreibung  VARCHAR(255) NULL,
-    mahlzeitentyp INT UNSIGNED NOT NULL,
+    mahlzeit_id   INT UNSIGNED NOT NULL,
     PRIMARY KEY (name),
-    FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (mahlzeit_id) ON DELETE RESTRICT
+    FOREIGN KEY (mahlzeit_id)   REFERENCES mahlzeitentyp (mahlzeit_id) ON DELETE RESTRICT
 );
 
 -- Entität Rezept: Rezeptersteller erstellt Rezept (1:N), Rezept hat Mahlzeitentyp (N:1).
@@ -110,7 +111,7 @@ CREATE TABLE rezept (
     ist_vegan       BOOLEAN          NOT NULL DEFAULT FALSE,
     bild            MEDIUMBLOB       NULL,
     erstellt_von    INT UNSIGNED     NOT NULL,
-    mahlzeitentyp   INT UNSIGNED      NOT NULL,
+    mahlzeit_id     INT UNSIGNED      NOT NULL,
     PRIMARY KEY (rezept_id),
     CONSTRAINT uq_rezept_name UNIQUE (name),
     CHECK (TRIM(name) <> ''),
@@ -118,7 +119,7 @@ CREATE TABLE rezept (
     CONSTRAINT ck_rezept_vegan CHECK (NOT ist_vegan OR ist_vegetarisch),
     -- Person mit Rezepten nicht löschbar (Alternative: SET NULL)
     FOREIGN KEY (erstellt_von)  REFERENCES person (person_id)   ON DELETE RESTRICT,
-    FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (mahlzeit_id) ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (mahlzeit_id)   REFERENCES mahlzeitentyp (mahlzeit_id) ON DELETE RESTRICT
 );
 
 -- Schwache Entität Schritt: ohne Rezept sinnlos. Rezept beinhaltet Schritt (1:N, mind. 1 Schritt).
