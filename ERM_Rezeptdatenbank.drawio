@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net">
   <diagram name="Seite-1" id="IBCvuv1qcQFPlRv6rLDh">
-    <mxGraphModel dx="1542" dy="1458" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1824" dy="1669" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -171,7 +171,7 @@
           <mxGeometry height="50" width="110" x="5" y="5" as="geometry" />
         </mxCell>
         <mxCell id="P0TmN2phrQ9iVu2IdbbX-97" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Einheit" vertex="1">
-          <mxGeometry height="50" width="90" x="190" y="415" as="geometry" />
+          <mxGeometry height="50" width="90" x="165" y="410" as="geometry" />
         </mxCell>
         <mxCell id="P0TmN2phrQ9iVu2IdbbX-98" edge="1" parent="1" source="P0TmN2phrQ9iVu2IdbbX-20" style="edgeStyle=none;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=none;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="P0TmN2phrQ9iVu2IdbbX-97">
           <mxGeometry relative="1" as="geometry" />
@@ -440,7 +440,7 @@
             <mxPoint x="60" y="130" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ROos62c7MUhGfINwAIiw-13" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;" value="Personenanzahl" vertex="1">
+        <mxCell id="ROos62c7MUhGfINwAIiw-13" parent="1" style="ellipse;whiteSpace=wrap;html=1;shapeInside=1;dashed=1;dashPattern=8 8;" value="Personenanzahl" vertex="1">
           <mxGeometry height="50" width="90" x="-60" y="70" as="geometry" />
         </mxCell>
         <mxCell id="ROos62c7MUhGfINwAIiw-15" edge="1" parent="1" source="ROos62c7MUhGfINwAIiw-13" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;innerLoopWaypoints=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=none;endFill=0;" target="ROos62c7MUhGfINwAIiw-13">

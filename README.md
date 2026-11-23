@@ -15,5 +15,5 @@ source 02_insert.sql;
 # KI-Nutzung
 | Werkzeug | Text | Was geändert wurde |
 |---|---|---|
-| ChatGPT | Begründung Entwurfsentscheidung | Rechtschreibungsüberprüfung, Umformulierung zur besseren Verständlichkeit|
+| GPT-6 | Begründung Entwurfsentscheidung | Rechtschreibungsüberprüfung, Umformulierung zur besseren Verständlichkeit|
 
