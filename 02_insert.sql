@@ -2,15 +2,15 @@
 USE kochbuechlein;
 START TRANSACTION;
 
-INSERT INTO haushalt (name, adresse) VALUES
-    ('WG Lindenstraße', 'Lindenstraße 12, 79098 Freiburg'),
-    ('Familie Berger',  'Am Mühlbach 3, 79100 Freiburg');
+INSERT INTO haushalt (haushalt_id, name, adresse, ausstattung) VALUES
+    (1, 'WG Lindenstraße', 'Lindenstraße 12, 79098 Freiburg', 'Herd,Kühlschrank,Mikrowelle,Wasserkocher'),
+    (2, 'Familie Berger',  'Am Mühlbach 3, 79100 Freiburg',   'Herd,Backofen,Kühlschrank,Gefrierschrank,Grill,Mixer');
 
-INSERT INTO person (email, vorname, nachname, haushalt) VALUES
-    ('anna.k@example.org',  'Anna',  'Keller',   'WG Lindenstraße'),
-    ('ben.s@example.org',   'Ben',   'Schuster', 'WG Lindenstraße'),
-    ('carla.b@example.org', 'Carla', 'Berger',   'Familie Berger'),
-    ('david.b@example.org', 'David', 'Berger',   'Familie Berger');
+INSERT INTO person (person_id, email, vorname, nachname, ist_vegetarisch, ist_vegan, haushalt_id) VALUES
+    (1, 'anna.k@example.org',  'Anna',  'Keller',   FALSE, FALSE, 1),
+    (2, 'ben.s@example.org',   'Ben',   'Schuster', FALSE, FALSE, 1),
+    (3, 'carla.b@example.org', 'Carla', 'Berger',   TRUE,  FALSE, 2),
+    (4, 'david.b@example.org', 'David', 'Berger',   FALSE, FALSE, 2);
 
 INSERT INTO kategorie (name, beschreibung, frischedauer_tage, empfohlene_aufbewahrung) VALUES
     ('Gemüse',        'Frisches Gemüse, Knollen und Zwiebeln', 7,    'Kühlschrank'),
@@ -24,31 +24,31 @@ INSERT INTO kategorie (name, beschreibung, frischedauer_tage, empfohlene_aufbewa
     ('Konserven',     'Dosen und Gläser, ungeöffnet',          NULL, 'Vorratsschrank'),
     ('Öle & Gewürze', 'Speiseöle, Salz, Gewürze',              NULL, 'Vorratsschrank');
 
-INSERT INTO zutat (name, spezifikation, einheit, kategorie) VALUES
-    ('Tomate',        '',            'Stk', 'Gemüse'),
-    ('Tomate',        'passiert',    'ml',  'Konserven'),
-    ('Zwiebel',       '',            'Stk', 'Gemüse'),
-    ('Knoblauch',     'Zehe',        'Stk', 'Gemüse'),
-    ('Karotte',       '',            'Stk', 'Gemüse'),
-    ('Kartoffel',     'festkochend', 'g',   'Gemüse'),
-    ('Paprika',       'rot',         'Stk', 'Gemüse'),
-    ('Gurke',         '',            'Stk', 'Gemüse'),
-    ('Apfel',         '',            'Stk', 'Obst'),
-    ('Basilikum',     'frisch',      'g',   'Kräuter'),
-    ('Milch',         '3,5 %',       'ml',  'Milchprodukte'),
-    ('Butter',        '',            'g',   'Milchprodukte'),
-    ('Parmesan',      '',            'g',   'Milchprodukte'),
-    ('Joghurt',       'natur',       'g',   'Milchprodukte'),
-    ('Hackfleisch',   'Rind',        'g',   'Fleisch'),
-    ('Hähnchenbrust', '',            'g',   'Fleisch'),
-    ('Ei',            'Größe M',     'Stk', 'Eier'),
-    ('Spaghetti',     '',            'g',   'Getreide'),
-    ('Reis',          'Basmati',     'g',   'Getreide'),
-    ('Haferflocken',  'zart',        'g',   'Getreide'),
-    ('Mehl',          'Type 405',    'g',   'Backzutaten'),
-    ('Zucker',        '',            'g',   'Backzutaten'),
-    ('Olivenöl',      'nativ extra', 'ml',  'Öle & Gewürze'),
-    ('Salz',          '',            'g',   'Öle & Gewürze');
+INSERT INTO zutat (zutat_id, name, spezifikation, einheit, kategorie) VALUES
+    (1,  'Tomate',        '',            'Stk', 'Gemüse'),
+    (2,  'Tomate',        'passiert',    'ml',  'Konserven'),
+    (3,  'Zwiebel',       '',            'Stk', 'Gemüse'),
+    (4,  'Knoblauch',     'Zehe',        'Stk', 'Gemüse'),
+    (5,  'Karotte',       '',            'Stk', 'Gemüse'),
+    (6,  'Kartoffel',     'festkochend', 'g',   'Gemüse'),
+    (7,  'Paprika',       'rot',         'Stk', 'Gemüse'),
+    (8,  'Gurke',         '',            'Stk', 'Gemüse'),
+    (9,  'Apfel',         '',            'Stk', 'Obst'),
+    (10, 'Basilikum',     'frisch',      'g',   'Kräuter'),
+    (11, 'Milch',         '3,5 %',       'ml',  'Milchprodukte'),
+    (12, 'Butter',        '',            'g',   'Milchprodukte'),
+    (13, 'Parmesan',      '',            'g',   'Milchprodukte'),
+    (14, 'Joghurt',       'natur',       'g',   'Milchprodukte'),
+    (15, 'Hackfleisch',   'Rind',        'g',   'Fleisch'),
+    (16, 'Hähnchenbrust', '',            'g',   'Fleisch'),
+    (17, 'Ei',            'Größe M',     'Stk', 'Eier'),
+    (18, 'Spaghetti',     '',            'g',   'Getreide'),
+    (19, 'Reis',          'Basmati',     'g',   'Getreide'),
+    (20, 'Haferflocken',  'zart',        'g',   'Getreide'),
+    (21, 'Mehl',          'Type 405',    'g',   'Backzutaten'),
+    (22, 'Zucker',        '',            'g',   'Backzutaten'),
+    (23, 'Olivenöl',      'nativ extra', 'ml',  'Öle & Gewürze'),
+    (24, 'Salz',          '',            'g',   'Öle & Gewürze');
 
 INSERT INTO mahlzeitentyp (name, beschreibung) VALUES
     ('Frühstück',       'Erste Mahlzeit am Morgen'),
@@ -66,122 +66,118 @@ INSERT INTO gerichttyp (name, beschreibung, mahlzeitentyp) VALUES
     ('Salat',            'Kalte Gerichte aus Gemüse',        'Grillabend'),
     ('Braten',           'Fleisch im Ofen gegart',           'Weihnachtsessen');
 
-INSERT INTO rezept (name, portionen, saison, region, bild, erstellt_von, mahlzeitentyp) VALUES
-    ('Spaghetti Bolognese',     4, 'ganzjährig', 'Italien',      'bilder/bolognese.jpg',   'anna.k@example.org',  'Abendessen'),
-    ('Tomatensalat',            2, 'Sommer',     'Mittelmeer',   NULL,                     'ben.s@example.org',   'Grillabend'),
-    ('Pfannkuchen',             4, 'ganzjährig', 'Deutschland',  'bilder/pfannkuchen.jpg', 'carla.b@example.org', 'Frühstück'),
-    ('Apfel-Porridge',          1, 'Herbst',     'Schottland',   NULL,                     'carla.b@example.org', 'Frühstück'),
-    ('Hähnchen-Reis-Pfanne',    2, 'ganzjährig', 'Asien',        NULL,                     'david.b@example.org', 'Mittagessen'),
-    ('Kartoffelsuppe',          4, 'Winter',     'Deutschland',  NULL,                     'anna.k@example.org',  'Mittagessen'),
-    ('Gurkensalat mit Joghurt', 2, 'Sommer',     'Griechenland', NULL,                     'ben.s@example.org',   'Grillabend');
+INSERT INTO rezept (rezept_id, name, portionen, saison, region, ist_vegetarisch, ist_vegan, bild, erstellt_von, mahlzeitentyp) VALUES
+    (1, 'Spaghetti Bolognese',     4, 'ganzjährig', 'Italien',      FALSE, FALSE, NULL, 1, 'Abendessen'),
+    (2, 'Tomatensalat',            2, 'Sommer',     'Mittelmeer',   TRUE,  TRUE,  NULL, 2, 'Grillabend'),
+    (3, 'Pfannkuchen',             4, 'ganzjährig', 'Deutschland',  TRUE,  FALSE, NULL, 3, 'Frühstück'),
+    (4, 'Apfel-Porridge',          1, 'Herbst',     'Schottland',   TRUE,  FALSE, NULL, 3, 'Frühstück'),
+    (5, 'Hähnchen-Reis-Pfanne',    2, 'ganzjährig', 'Asien',        FALSE, FALSE, NULL, 4, 'Mittagessen'),
+    (6, 'Kartoffelsuppe',          4, 'Winter',     'Deutschland',  TRUE,  FALSE, NULL, 1, 'Mittagessen'),
+    (7, 'Gurkensalat mit Joghurt', 2, 'Sommer',     'Griechenland', TRUE,  FALSE, NULL, 2, 'Grillabend');
 
-INSERT INTO rezept_zutat (rezept, zutat_name, zutat_spezifikation, menge) VALUES
-    ('Spaghetti Bolognese',   'Spaghetti',    '',            400),
-    ('Spaghetti Bolognese',   'Hackfleisch',  'Rind',        400),
-    ('Spaghetti Bolognese',   'Tomate',       'passiert',    500),
-    ('Spaghetti Bolognese',   'Zwiebel',      '',            1),
-    ('Spaghetti Bolognese',   'Knoblauch',    'Zehe',        2),
-    ('Spaghetti Bolognese',   'Olivenöl',     'nativ extra', 20),
-    ('Spaghetti Bolognese',   'Salz',         '',            5),
-    ('Spaghetti Bolognese',   'Parmesan',     '',            40),
+INSERT INTO benoetigt (rezept_id, zutat_id, menge) VALUES
+    (1, 18, 400),
+    (1, 15, 400),
+    (1, 2,  500),
+    (1, 3,  1),
+    (1, 4,  2),
+    (1, 23, 20),
+    (1, 24, 5),
+    (1, 13, 40),
+    (2, 1,  4),
+    (2, 3,  1),
+    (2, 10, 10),
+    (2, 23, 30),
+    (2, 24, 2),
+    (3, 21, 250),
+    (3, 11, 500),
+    (3, 17, 3),
+    (3, 22, 30),
+    (3, 12, 20),
+    (3, 24, 1),
+    (4, 20, 50),
+    (4, 11, 200),
+    (4, 9,  1),
+    (4, 22, 5),
+    (5, 16, 300),
+    (5, 19, 150),
+    (5, 7,  2),
+    (5, 3,  1),
+    (5, 23, 15),
+    (5, 24, 3),
+    (6, 6,  800),
+    (6, 5,  2),
+    (6, 3,  1),
+    (6, 12, 30),
+    (6, 11, 200),
+    (6, 24, 5),
+    (7, 8,  1),
+    (7, 14, 150),
+    (7, 4,  1),
+    (7, 24, 2);
 
-    ('Tomatensalat',          'Tomate',       '',            4),
-    ('Tomatensalat',          'Zwiebel',      '',            1),
-    ('Tomatensalat',          'Basilikum',    'frisch',      10),
-    ('Tomatensalat',          'Olivenöl',     'nativ extra', 30),
-    ('Tomatensalat',          'Salz',         '',            2),
+INSERT INTO schritt (rezept_id, reihenfolge, beschreibung) VALUES
+    (1, 1, 'Zwiebel und Knoblauch würfeln, in Olivenöl glasig dünsten.'),
+    (1, 2, 'Hackfleisch zugeben und krümelig anbraten.'),
+    (1, 3, 'Passierte Tomaten einrühren, salzen, 30 Minuten köcheln.'),
+    (1, 4, 'Spaghetti kochen, mit Soße und Parmesan servieren.'),
+    (2, 1, 'Tomaten in Scheiben, Zwiebel in Ringe schneiden.'),
+    (2, 2, 'Mit Öl und Salz anmachen, Basilikum darüber.'),
+    (3, 1, 'Mehl, Milch, Eier, Zucker und Salz glatt rühren.'),
+    (3, 2, 'Teig 15 Minuten quellen lassen.'),
+    (3, 3, 'In Butter dünne Pfannkuchen ausbacken.'),
+    (4, 1, 'Haferflocken in Milch aufkochen, 5 Minuten quellen lassen.'),
+    (4, 2, 'Apfel reiben, unterrühren, mit Zucker abschmecken.'),
+    (5, 1, 'Reis garen.'),
+    (5, 2, 'Hähnchen in Streifen in Olivenöl anbraten.'),
+    (5, 3, 'Zwiebel und Paprika mitbraten, Reis unterheben, salzen.'),
+    (6, 1, 'Kartoffeln, Karotten und Zwiebel schälen und würfeln.'),
+    (6, 2, 'In Butter andünsten, mit Wasser 20 Minuten kochen.'),
+    (6, 3, 'Milch zugeben, pürieren, salzen.'),
+    (7, 1, 'Gurke hobeln, salzen, abtropfen lassen.'),
+    (7, 2, 'Joghurt mit Knoblauch verrühren und unterheben.');
 
-    ('Pfannkuchen',           'Mehl',         'Type 405',    250),
-    ('Pfannkuchen',           'Milch',        '3,5 %',       500),
-    ('Pfannkuchen',           'Ei',           'Größe M',     3),
-    ('Pfannkuchen',           'Zucker',       '',            30),
-    ('Pfannkuchen',           'Butter',       '',            20),
-    ('Pfannkuchen',           'Salz',         '',            1),
-
-    ('Apfel-Porridge',        'Haferflocken', 'zart',        50),
-    ('Apfel-Porridge',        'Milch',        '3,5 %',       200),
-    ('Apfel-Porridge',        'Apfel',        '',            1),
-    ('Apfel-Porridge',        'Zucker',       '',            5),
-
-    ('Hähnchen-Reis-Pfanne',  'Hähnchenbrust','',           300),
-    ('Hähnchen-Reis-Pfanne',  'Reis',         'Basmati',     150),
-    ('Hähnchen-Reis-Pfanne',  'Paprika',      'rot',         2),
-    ('Hähnchen-Reis-Pfanne',  'Zwiebel',      '',            1),
-    ('Hähnchen-Reis-Pfanne',  'Olivenöl',     'nativ extra', 15),
-    ('Hähnchen-Reis-Pfanne',  'Salz',         '',            3),
-
-    ('Kartoffelsuppe',        'Kartoffel',    'festkochend', 800),
-    ('Kartoffelsuppe',        'Karotte',      '',            2),
-    ('Kartoffelsuppe',        'Zwiebel',      '',            1),
-    ('Kartoffelsuppe',        'Butter',       '',            30),
-    ('Kartoffelsuppe',        'Milch',        '3,5 %',       200),
-    ('Kartoffelsuppe',        'Salz',         '',            5),
-
-    ('Gurkensalat mit Joghurt','Gurke',        '',           1),
-    ('Gurkensalat mit Joghurt','Joghurt',      'natur',      150),
-    ('Gurkensalat mit Joghurt','Knoblauch',    'Zehe',       1),
-    ('Gurkensalat mit Joghurt','Salz',         '',           2);
-
-INSERT INTO schritt (rezept, reihenfolge, beschreibung) VALUES
-    ('Spaghetti Bolognese', 1, 'Zwiebel und Knoblauch würfeln, in Olivenöl glasig dünsten.'),
-    ('Spaghetti Bolognese', 2, 'Hackfleisch zugeben und krümelig anbraten.'),
-    ('Spaghetti Bolognese', 3, 'Passierte Tomaten einrühren, salzen, 30 Minuten köcheln.'),
-    ('Spaghetti Bolognese', 4, 'Spaghetti kochen, mit Soße und Parmesan servieren.'),
-    ('Tomatensalat', 1, 'Tomaten in Scheiben, Zwiebel in Ringe schneiden.'),
-    ('Tomatensalat', 2, 'Mit Öl und Salz anmachen, Basilikum darüber.'),
-    ('Pfannkuchen', 1, 'Mehl, Milch, Eier, Zucker und Salz glatt rühren.'),
-    ('Pfannkuchen', 2, 'Teig 15 Minuten quellen lassen.'),
-    ('Pfannkuchen', 3, 'In Butter dünne Pfannkuchen ausbacken.'),
-    ('Apfel-Porridge', 1, 'Haferflocken in Milch aufkochen, 5 Minuten quellen lassen.'),
-    ('Apfel-Porridge', 2, 'Apfel reiben, unterrühren, mit Zucker abschmecken.'),
-    ('Hähnchen-Reis-Pfanne', 1, 'Reis garen.'),
-    ('Hähnchen-Reis-Pfanne', 2, 'Hähnchen in Streifen in Olivenöl anbraten.'),
-    ('Hähnchen-Reis-Pfanne', 3, 'Zwiebel und Paprika mitbraten, Reis unterheben, salzen.'),
-    ('Kartoffelsuppe', 1, 'Kartoffeln, Karotten und Zwiebel schälen und würfeln.'),
-    ('Kartoffelsuppe', 2, 'In Butter andünsten, mit Wasser 20 Minuten kochen.'),
-    ('Kartoffelsuppe', 3, 'Milch zugeben, pürieren, salzen.'),
-    ('Gurkensalat mit Joghurt', 1, 'Gurke hobeln, salzen, abtropfen lassen.'),
-    ('Gurkensalat mit Joghurt', 2, 'Joghurt mit Knoblauch verrühren und unterheben.');
-
-INSERT INTO kocht (koch, rezept, notiz) VALUES
-    ('anna.k@example.org',  'Spaghetti Bolognese',  'Mit einem Schuss Rotwein noch besser.'),
-    ('ben.s@example.org',   'Spaghetti Bolognese',  NULL),
-    ('ben.s@example.org',   'Tomatensalat',         'Basilikum erst kurz vor dem Servieren.'),
-    ('carla.b@example.org', 'Pfannkuchen',          'Teig über Nacht quellen lassen.'),
-    ('david.b@example.org', 'Pfannkuchen',          NULL),
-    ('david.b@example.org', 'Hähnchen-Reis-Pfanne', 'Etwas Sojasoße dazu.');
+INSERT INTO kocht (person_id, rezept_id, gekocht_am, notiz) VALUES
+    (1, 1, CURDATE() - INTERVAL 14 DAY, 'Mit einem Schuss Rotwein noch besser.'),
+    (1, 1, CURDATE() - INTERVAL  3 DAY, NULL),
+    (2, 1, CURDATE() - INTERVAL 30 DAY, NULL),
+    (2, 2, CURDATE() - INTERVAL 60 DAY, 'Basilikum erst kurz vor dem Servieren.'),
+    (3, 3, CURDATE() - INTERVAL  7 DAY, 'Teig über Nacht quellen lassen.'),
+    (3, 3, CURDATE() - INTERVAL  1 DAY, NULL),
+    (4, 3, CURDATE() - INTERVAL 21 DAY, NULL),
+    (4, 5, CURDATE() - INTERVAL 10 DAY, 'Etwas Sojasoße dazu.');
 
 -- Kommentar rechts: haltbar_bis relativ zu heute
-INSERT INTO vorrat (haushalt, zutat_name, zutat_spezifikation, menge, kaufdatum, mhd, ort) VALUES
-    ('WG Lindenstraße', 'Tomate',      '',            5,    CURDATE() - INTERVAL   5 DAY, NULL, 'Obstschale'),                          -- +2
-    ('WG Lindenstraße', 'Tomate',      'passiert',    500,  CURDATE() - INTERVAL  20 DAY, CURDATE() + INTERVAL   4 DAY, 'Vorratsschrank'),  -- +4
-    ('WG Lindenstraße', 'Zwiebel',     '',            3,    CURDATE() - INTERVAL   2 DAY, NULL, 'Keller'),                          -- +5
-    ('WG Lindenstraße', 'Knoblauch',   'Zehe',        4,    CURDATE() - INTERVAL   4 DAY, NULL, 'Vorratsschrank'),                          -- +3
-    ('WG Lindenstraße', 'Karotte',     '',            1,    CURDATE() - INTERVAL   2 DAY, NULL, 'Kühlschrank'),                          -- +5
-    ('WG Lindenstraße', 'Kartoffel',   'festkochend', 2000, CURDATE() - INTERVAL  10 DAY, CURDATE() + INTERVAL  20 DAY, 'Keller'),  -- +20, MHD vor Kategorie
-    ('WG Lindenstraße', 'Paprika',     'rot',         2,    CURDATE() - INTERVAL   9 DAY, NULL, 'Kühlschrank'),                          -- -2, abgelaufen
-    ('WG Lindenstraße', 'Gurke',       '',            1,    CURDATE() - INTERVAL   4 DAY, NULL, 'Kühlschrank'),                          -- +3
-    ('WG Lindenstraße', 'Basilikum',   'frisch',      15,   CURDATE() - INTERVAL   3 DAY, NULL, 'Kühlschrank'),                          -- +2
-    ('WG Lindenstraße', 'Milch',       '3,5 %',       1000, CURDATE() - INTERVAL   2 DAY, CURDATE() + INTERVAL   6 DAY, 'Kühlschrank'),  -- +6
-    ('WG Lindenstraße', 'Butter',      '',            250,  CURDATE() - INTERVAL   3 DAY, CURDATE() + INTERVAL  25 DAY, 'Kühlschrank'),  -- +25
-    ('WG Lindenstraße', 'Parmesan',    '',            100,  CURDATE() - INTERVAL  10 DAY, CURDATE() + INTERVAL  40 DAY, 'Kühlschrank'),  -- +40
-    ('WG Lindenstraße', 'Joghurt',     'natur',       500,  CURDATE() - INTERVAL   5 DAY, CURDATE() + INTERVAL   3 DAY, 'Kühlschrank'),  -- +3
-    ('WG Lindenstraße', 'Hackfleisch', 'Rind',        250,  CURDATE() - INTERVAL   1 DAY, NULL, 'Kühlschrank'),                          -- +2
-    ('WG Lindenstraße', 'Spaghetti',   '',            500,  CURDATE() - INTERVAL  30 DAY, CURDATE() + INTERVAL 200 DAY, 'Vorratsschrank'),  -- +200
-    ('WG Lindenstraße', 'Olivenöl',    'nativ extra', 500,  CURDATE() - INTERVAL  60 DAY, CURDATE() + INTERVAL 300 DAY, 'Vorratsschrank'),  -- +300
-    ('WG Lindenstraße', 'Salz',        '',            500,  CURDATE() - INTERVAL 100 DAY, NULL, 'Vorratsschrank'),                          -- unbegrenzt
-    ('Familie Berger', 'Mehl',          'Type 405',    1000, CURDATE() - INTERVAL 40 DAY, CURDATE() + INTERVAL 150 DAY, 'Vorratsschrank'), -- +150
-    ('Familie Berger', 'Zucker',        '',            1000, CURDATE() - INTERVAL 90 DAY, NULL, 'Vorratsschrank'),                         -- unbegrenzt
-    ('Familie Berger', 'Ei',            'Größe M',     4,    CURDATE() - INTERVAL  5 DAY, CURDATE() + INTERVAL   1 DAY, 'Kühlschrank'), -- +1
-    ('Familie Berger', 'Milch',         '3,5 %',       300,  CURDATE() - INTERVAL  3 DAY, CURDATE() + INTERVAL   2 DAY, 'Kühlschrank'), -- +2
-    ('Familie Berger', 'Butter',        '',            100,  CURDATE() - INTERVAL 10 DAY, CURDATE() + INTERVAL  20 DAY, 'Kühlschrank'), -- +20
-    ('Familie Berger', 'Salz',          '',            250,  CURDATE() - INTERVAL 50 DAY, NULL, 'Vorratsschrank'),                         -- unbegrenzt
-    ('Familie Berger', 'Haferflocken',  'zart',        500,  CURDATE() - INTERVAL 20 DAY, CURDATE() + INTERVAL 100 DAY, 'Vorratsschrank'), -- +100
-    ('Familie Berger', 'Apfel',         '',            4,    CURDATE() - INTERVAL  3 DAY, NULL, 'Obstschale'),                         -- +7
-    ('Familie Berger', 'Hähnchenbrust', '',            300,  CURDATE() - INTERVAL  1 DAY, NULL, 'Kühlschrank'),                         -- +2
-    ('Familie Berger', 'Reis',          'Basmati',     1000, CURDATE() - INTERVAL 15 DAY, CURDATE() + INTERVAL 300 DAY, 'Vorratsschrank'), -- +300
-    ('Familie Berger', 'Paprika',       'rot',         2,    CURDATE() - INTERVAL  1 DAY, NULL, 'Kühlschrank'),                         -- +6
-    ('Familie Berger', 'Zwiebel',       '',            2,    CURDATE() - INTERVAL  1 DAY, NULL, 'Keller'),                         -- +6
-    ('Familie Berger', 'Olivenöl',      'nativ extra', 750,  CURDATE() - INTERVAL 30 DAY, CURDATE() + INTERVAL 200 DAY, 'Vorratsschrank'); -- +200
+INSERT INTO vorrat (haushalt_id, zutat_id, menge, kaufdatum, mhd, ort) VALUES
+    (1, 1,  5,    CURDATE() - INTERVAL   5 DAY, NULL,                         'Obstschale'),      -- +2
+    (1, 2,  500,  CURDATE() - INTERVAL  20 DAY, CURDATE() + INTERVAL   4 DAY, 'Vorratsschrank'),  -- +4
+    (1, 3,  3,    CURDATE() - INTERVAL   2 DAY, NULL,                         'Keller'),          -- +5
+    (1, 4,  4,    CURDATE() - INTERVAL   4 DAY, NULL,                         'Vorratsschrank'),  -- +3
+    (1, 5,  1,    CURDATE() - INTERVAL   2 DAY, NULL,                         'Kühlschrank'),     -- +5
+    (1, 6,  2000, CURDATE() - INTERVAL  10 DAY, CURDATE() + INTERVAL  20 DAY, 'Keller'),          -- +20, MHD vor Kategorie
+    (1, 7,  2,    CURDATE() - INTERVAL   9 DAY, NULL,                         'Kühlschrank'),     -- -2, abgelaufen
+    (1, 8,  1,    CURDATE() - INTERVAL   4 DAY, NULL,                         'Kühlschrank'),     -- +3
+    (1, 10, 15,   CURDATE() - INTERVAL   3 DAY, NULL,                         'Kühlschrank'),     -- +2
+    (1, 11, 1000, CURDATE() - INTERVAL   2 DAY, CURDATE() + INTERVAL   6 DAY, 'Kühlschrank'),     -- +6
+    (1, 12, 250,  CURDATE() - INTERVAL   3 DAY, CURDATE() + INTERVAL  25 DAY, 'Kühlschrank'),     -- +25
+    (1, 13, 100,  CURDATE() - INTERVAL  10 DAY, CURDATE() + INTERVAL  40 DAY, 'Kühlschrank'),     -- +40
+    (1, 14, 500,  CURDATE() - INTERVAL   5 DAY, CURDATE() + INTERVAL   3 DAY, 'Kühlschrank'),     -- +3
+    (1, 15, 250,  CURDATE() - INTERVAL   1 DAY, NULL,                         'Kühlschrank'),     -- +2
+    (1, 18, 500,  CURDATE() - INTERVAL  30 DAY, CURDATE() + INTERVAL 200 DAY, 'Vorratsschrank'),  -- +200
+    (1, 23, 500,  CURDATE() - INTERVAL  60 DAY, CURDATE() + INTERVAL 300 DAY, 'Vorratsschrank'),  -- +300
+    (1, 24, 500,  CURDATE() - INTERVAL 100 DAY, NULL,                         'Vorratsschrank'),  -- unbegrenzt
+    (2, 21, 1000, CURDATE() - INTERVAL 40 DAY,  CURDATE() + INTERVAL 150 DAY, 'Vorratsschrank'),  -- +150
+    (2, 22, 1000, CURDATE() - INTERVAL 90 DAY,  NULL,                         'Vorratsschrank'),  -- unbegrenzt
+    (2, 17, 4,    CURDATE() - INTERVAL  5 DAY,  CURDATE() + INTERVAL   1 DAY, 'Kühlschrank'),     -- +1
+    (2, 11, 300,  CURDATE() - INTERVAL  3 DAY,  CURDATE() + INTERVAL   2 DAY, 'Kühlschrank'),     -- +2
+    (2, 12, 100,  CURDATE() - INTERVAL 10 DAY,  CURDATE() + INTERVAL  20 DAY, 'Kühlschrank'),     -- +20
+    (2, 24, 250,  CURDATE() - INTERVAL 50 DAY,  NULL,                         'Vorratsschrank'),  -- unbegrenzt
+    (2, 20, 500,  CURDATE() - INTERVAL 20 DAY,  CURDATE() + INTERVAL 100 DAY, 'Vorratsschrank'),  -- +100
+    (2, 9,  4,    CURDATE() - INTERVAL  3 DAY,  NULL,                         'Obstschale'),      -- +7
+    (2, 16, 300,  CURDATE() - INTERVAL  1 DAY,  NULL,                         'Kühlschrank'),     -- +2
+    (2, 19, 1000, CURDATE() - INTERVAL 15 DAY,  CURDATE() + INTERVAL 300 DAY, 'Vorratsschrank'),  -- +300
+    (2, 7,  2,    CURDATE() - INTERVAL  1 DAY,  NULL,                         'Kühlschrank'),     -- +6
+    (2, 3,  2,    CURDATE() - INTERVAL  1 DAY,  NULL,                         'Keller'),          -- +6
+    (2, 23, 750,  CURDATE() - INTERVAL 30 DAY,  CURDATE() + INTERVAL 200 DAY, 'Vorratsschrank');  -- +200
 
 COMMIT;
