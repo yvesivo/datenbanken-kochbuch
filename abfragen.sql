@@ -9,13 +9,15 @@
     GROUP BY benoetigt.rezept_id
     HAVING COUNT(DISTINCT benoetigt.zutat_id) = COUNT(DISTINCT vorrat.zutat_id);
 
--- 2. Welche Gerichte eines bestimmten Typs habe ich seit mehr als drei Monaten nicht mehr gekocht?
-    SELECT *
+-- 2. Welche Gerichte eines bestimmten Typs habe ich seit mehr als 90 Tagen nicht mehr gekocht?
+    SELECT rezept.name AS 'Rezept seit 90 Tagen nicht gekocht'
     FROM kocht
     JOIN rezept using (rezept_id)
-    JOIN mahlzeitentyp using (mahlzeitentyp_id)
-    WHERE haushalt_id = 1
-    AND person_id = 1
+    JOIN mahlzeitentyp using (mahlzeit_id)
+    JOIN person using (person_id)
+    JOIN haushalt using (haushalt_id)
+    WHERE mahlzeitentyp.name = 'Frühstück'
+    AND haushalt_id = 1
     GROUP BY rezept_id
     HAVING DATEDIFF(NOW(), MAX(kocht.gekocht_am)) > 90;
     

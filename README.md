@@ -6,11 +6,8 @@ mariadb -uroot -proot
 
 ```sql
 source 01_create.sql;
-use kochbuechlein;
-source 02_insert.sql;
+source 02_insert_abfragen.sql;
 ```
- 
-
 
 # KI-Nutzung
 | Werkzeug | Text | Was geändert wurde |
