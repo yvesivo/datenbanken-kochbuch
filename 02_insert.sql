@@ -50,30 +50,30 @@ INSERT INTO zutat (zutat_id, name, spezifikation, einheit, kategorie) VALUES
     (23, 'Olivenöl',      'nativ extra', 'ml',  'Öle & Gewürze'),
     (24, 'Salz',          '',            'g',   'Öle & Gewürze');
 
-INSERT INTO mahlzeitentyp (name, beschreibung) VALUES
-    ('Frühstück',       'Erste Mahlzeit am Morgen'),
-    ('Mittagessen',     'Warme Hauptmahlzeit am Mittag'),
-    ('Abendessen',      'Mahlzeit am Abend'),
-    ('Grillabend',      'Geselliges Essen im Freien'),
-    ('Weihnachtsessen', 'Festessen an den Feiertagen');
+INSERT INTO mahlzeitentyp (mahlzeit_id, name, beschreibung) VALUES
+    (1, 'Frühstück',       'Erste Mahlzeit am Morgen'),
+    (2, 'Mittagessen',     'Warme Hauptmahlzeit am Mittag'),
+    (3, 'Abendessen',      'Mahlzeit am Abend'),
+    (4, 'Grillabend',      'Geselliges Essen im Freien'),
+    (5, 'Weihnachtsessen', 'Festessen an den Feiertagen');
 
 INSERT INTO gerichttyp (name, beschreibung, mahlzeitentyp) VALUES
-    ('Müsli & Porridge', 'Flocken oder Brei mit Milch',      'Frühstück'),
-    ('Süßspeise',        'Süße Gerichte wie Pfannkuchen',    'Frühstück'),
-    ('Suppe',            'Flüssige Gerichte, warm serviert', 'Mittagessen'),
-    ('Pfannengericht',   'In der Pfanne gegart',             'Mittagessen'),
-    ('Nudelgericht',     'Pasta mit Soße',                   'Abendessen'),
-    ('Salat',            'Kalte Gerichte aus Gemüse',        'Grillabend'),
-    ('Braten',           'Fleisch im Ofen gegart',           'Weihnachtsessen');
+    ('Müsli & Porridge', 'Flocken oder Brei mit Milch',      1),
+    ('Süßspeise',        'Süße Gerichte wie Pfannkuchen',    1),
+    ('Suppe',            'Flüssige Gerichte, warm serviert', 2),
+    ('Pfannengericht',   'In der Pfanne gegart',             2),
+    ('Nudelgericht',     'Pasta mit Soße',                   3),
+    ('Salat',            'Kalte Gerichte aus Gemüse',        4),
+    ('Braten',           'Fleisch im Ofen gegart',           5);
 
 INSERT INTO rezept (rezept_id, name, portionen, saison, region, ist_vegetarisch, ist_vegan, bild, erstellt_von, mahlzeitentyp) VALUES
-    (1, 'Spaghetti Bolognese',     4, 'ganzjährig', 'Italien',      FALSE, FALSE, NULL, 1, 'Abendessen'),
-    (2, 'Tomatensalat',            2, 'Sommer',     'Mittelmeer',   TRUE,  TRUE,  NULL, 2, 'Grillabend'),
-    (3, 'Pfannkuchen',             4, 'ganzjährig', 'Deutschland',  TRUE,  FALSE, NULL, 3, 'Frühstück'),
-    (4, 'Apfel-Porridge',          1, 'Herbst',     'Schottland',   TRUE,  FALSE, NULL, 3, 'Frühstück'),
-    (5, 'Hähnchen-Reis-Pfanne',    2, 'ganzjährig', 'Asien',        FALSE, FALSE, NULL, 4, 'Mittagessen'),
-    (6, 'Kartoffelsuppe',          4, 'Winter',     'Deutschland',  TRUE,  FALSE, NULL, 1, 'Mittagessen'),
-    (7, 'Gurkensalat mit Joghurt', 2, 'Sommer',     'Griechenland', TRUE,  FALSE, NULL, 2, 'Grillabend');
+    (1, 'Spaghetti Bolognese',     4, 'ganzjährig', 'Italien',      FALSE, FALSE, NULL, 1, 3),
+    (2, 'Tomatensalat',            2, 'Sommer',     'Mittelmeer',   TRUE,  TRUE,  NULL, 2, 4),
+    (3, 'Pfannkuchen',             4, 'ganzjährig', 'Deutschland',  TRUE,  FALSE, NULL, 3, 1),
+    (4, 'Apfel-Porridge',          1, 'Herbst',     'Schottland',   TRUE,  FALSE, NULL, 3, 1),
+    (5, 'Hähnchen-Reis-Pfanne',    2, 'ganzjährig', 'Asien',        FALSE, FALSE, NULL, 4, 2),
+    (6, 'Kartoffelsuppe',          4, 'Winter',     'Deutschland',  TRUE,  FALSE, NULL, 1, 2),
+    (7, 'Gurkensalat mit Joghurt', 2, 'Sommer',     'Griechenland', TRUE,  FALSE, NULL, 2, 4);
 
 INSERT INTO benoetigt (rezept_id, zutat_id, menge) VALUES
     (1, 18, 400),

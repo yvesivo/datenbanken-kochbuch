@@ -80,9 +80,11 @@ CREATE TABLE zutat (
 
 -- Entität Mahlzeitentyp (Frühstück, Grillabend,...): ordnet Rezepte einem Anlass zu.
 CREATE TABLE mahlzeitentyp (
+    mahlzeit_id  INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name         VARCHAR(50)  NOT NULL,
     beschreibung VARCHAR(255) NULL,
-    PRIMARY KEY (name)
+    PRIMARY KEY (mahlzeit_id),
+    CONSTRAINT uq_mahlzeit_name UNIQUE (name)
 );
 
 -- Entität Gerichttyp (Suppe, Salat …) verfeinert den Mahlzeitentyp.
@@ -90,9 +92,9 @@ CREATE TABLE mahlzeitentyp (
 CREATE TABLE gerichttyp (
     name          VARCHAR(50)  NOT NULL,
     beschreibung  VARCHAR(255) NULL,
-    mahlzeitentyp VARCHAR(50)  NOT NULL,
+    mahlzeitentyp INT UNSIGNED NOT NULL,
     PRIMARY KEY (name),
-    FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (name) ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (mahlzeit_id) ON DELETE RESTRICT
 );
 
 -- Entität Rezept: Rezeptersteller erstellt Rezept (1:N), Rezept hat Mahlzeitentyp (N:1).
@@ -108,7 +110,7 @@ CREATE TABLE rezept (
     ist_vegan       BOOLEAN          NOT NULL DEFAULT FALSE,
     bild            MEDIUMBLOB       NULL,
     erstellt_von    INT UNSIGNED     NOT NULL,
-    mahlzeitentyp   VARCHAR(50)      NOT NULL,
+    mahlzeitentyp   INT UNSIGNED      NOT NULL,
     PRIMARY KEY (rezept_id),
     CONSTRAINT uq_rezept_name UNIQUE (name),
     CHECK (TRIM(name) <> ''),
@@ -116,7 +118,7 @@ CREATE TABLE rezept (
     CONSTRAINT ck_rezept_vegan CHECK (NOT ist_vegan OR ist_vegetarisch),
     -- Person mit Rezepten nicht löschbar (Alternative: SET NULL)
     FOREIGN KEY (erstellt_von)  REFERENCES person (person_id)   ON DELETE RESTRICT,
-    FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (name) ON UPDATE CASCADE ON DELETE RESTRICT
+    FOREIGN KEY (mahlzeitentyp) REFERENCES mahlzeitentyp (mahlzeit_id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 -- Schwache Entität Schritt: ohne Rezept sinnlos. Rezept beinhaltet Schritt (1:N, mind. 1 Schritt).
@@ -174,12 +176,10 @@ CREATE TABLE vorrat (
 
 -- Abgeleitete Attribute aus dem ERM als View, werden nicht gespeichert, sondern berechnet, damit sie nie veralten:
 -- frisch_bis = Kaufdatum + Frischedauer der Kategorie, 
--- haltbar_bis = MHD, sonst frisch_bis (NULL = unbegrenzt).
 CREATE VIEW v_vorrat AS
 SELECT v.haushalt_id, h.name AS haushalt, v.zutat_id, z.name AS zutat, z.spezifikation, z.einheit, z.kategorie,
        v.menge, v.kaufdatum, v.mhd, v.ort,
-       v.kaufdatum + INTERVAL k.frischedauer_tage DAY                   AS frisch_bis,
-       COALESCE(v.mhd, v.kaufdatum + INTERVAL k.frischedauer_tage DAY)  AS haltbar_bis
+       v.kaufdatum + INTERVAL k.frischedauer_tage DAY AS frisch_bis
 FROM vorrat v
 JOIN haushalt h  ON h.haushalt_id = v.haushalt_id
 JOIN zutat z     ON z.zutat_id = v.zutat_id
